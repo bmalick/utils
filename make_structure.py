@@ -39,11 +39,13 @@ def get_struct(content: dict) -> t.List[str]:
     paths = []
     current = content
     for idx, key in enumerate(current):
+        idx_str = (2-len(str(idx+1))) * '0' + str(idx+1)
         for sub_idx, item in enumerate(current[key]):
+            sub_idx_str = (2 - len(str(sub_idx+1))) * '0' + str(sub_idx+1)
             if isinstance(item, dict):
-                paths.extend([f"{idx+1}-{key}.{name}" for name in get_struct(item)])
+                paths.extend([f"{idx_str}-{key}.{name}" for name in get_struct(item)])
                 # paths.extend([f"{key}.{sub_idx_+1}-{name}" for sub_idx_, name in enumerate(get_struct(item))])
-            else: paths.append(f"{idx+1}-{key}.{sub_idx+1}-{item}")
+            else: paths.append(f"{idx_str}-{key}.{sub_idx_str}-{item}")
     return paths
 
 def create_dirs_from_structure(structure: t.List[str], base_dir: str, gitkeep: bool) -> None:
