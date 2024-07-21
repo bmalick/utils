@@ -20,7 +20,7 @@ from argparse import ArgumentParser
 """
 
 def create_dir(name: str) -> None:
-    print(f"Create dir: {name}")
+    # print(f"Create dir: {name}")
     os.makedirs(name, exist_ok=True)
 
 def add_gitkeep(path: str) -> None:
@@ -43,7 +43,12 @@ def get_struct(content: dict) -> t.List[str]:
         for sub_idx, item in enumerate(current[key]):
             sub_idx_str = (2 - len(str(sub_idx+1))) * '0' + str(sub_idx+1)
             if isinstance(item, dict):
-                paths.extend([f"{idx_str}-{key}.{name}" for name in get_struct(item)])
+                sub_items = get_struct(item)
+                sub_items = [sub_idx_str + '-' + p.split("-", maxsplit=1)[-1] for p in sub_items]
+                sub_items = [idx_str + '-' + key + '.' + p for p in sub_items]
+                paths.extend(sub_items)
+                # print([f"{idx_str}-{key}.{sub_idx}-{key}.{name}" for name in get_struct(item)])
+                # paths.extend([f"{idx_str}-{key}.{sub_idx}-{key}.{name}" for name in get_struct(item)])
                 # paths.extend([f"{key}.{sub_idx_+1}-{name}" for sub_idx_, name in enumerate(get_struct(item))])
             else: paths.append(f"{idx_str}-{key}.{sub_idx_str}-{item}")
     return paths
